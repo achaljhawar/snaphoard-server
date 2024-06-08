@@ -7,9 +7,9 @@ import { AuthCredentialsValidator } from "../lib/zodsignup";
 import { z } from "zod";
 
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE as string,
-  host: process.env.EMAIL_HOST as string,
-  port: process.env.EMAIL_PORT as string,
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
   secure: true,
   auth: {
     user: process.env.EMAIL as string,
