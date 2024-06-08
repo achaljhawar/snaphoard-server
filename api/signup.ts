@@ -7,13 +7,13 @@ import { AuthCredentialsValidator } from "../lib/zodsignup";
 import { z } from "zod";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.google.com",
-  port: 587,
+  service: process.env.EMAIL_SERVICE as string,
+  host: process.env.EMAIL_HOST as string,
+  port: process.env.EMAIL_PORT as string,
   secure: true,
   auth: {
-    user: "snaphoard@gmail.com",
-    pass: "mydefmdejmvtwqvt",
+    user: process.env.EMAIL as string,
+    pass: process.env.EMAIL_PASSWORD as string,
   },
 });
 async function sendVerificationEmail(
