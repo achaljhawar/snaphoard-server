@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { supabase } from "../db/supabase";
 import { sha256 } from "js-sha256";
 import { AuthCredentialsValidator } from "../lib/zodlogin";
+import { z } from "zod";
 import jwt from "jsonwebtoken";
 export const loginUser = async (req: Request, res: Response) => {
   try {
@@ -38,7 +39,9 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "User not found" });
     }
   } catch (err) {
-
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ error: err.errors });
+    }
     console.error("Error logging in:", err);
   }
 };

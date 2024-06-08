@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 import { sha256 } from "js-sha256";
 import { authcodecreator, generateEightDigitNumber } from "../lib/utils";
 import { AuthCredentialsValidator } from "../lib/zodsignup";
+import { z } from "zod";
 
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE as string,
@@ -196,6 +197,10 @@ export const createUser = async (req: Request, res: Response) => {
     await sendVerificationEmail(email, verifyUrl, verification_code);
     return res.status(200).json({ message: "User created successfully" });
   } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ error: err.errors });
+    }
+
     console.error("Error creating user:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
