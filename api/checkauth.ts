@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { supabase } from "../db/supabase";
+interface DecodedToken {
+  id: string;
+  username: string;
+  hashedPassword: string;
+  role: string;
+  iat: number;
+  exp: number;
+}
 export const checkAuth = async (req: Request, res: Response) => {
     try {
       const authHeader = req.headers.authorization;
@@ -13,7 +21,7 @@ export const checkAuth = async (req: Request, res: Response) => {
       if (scheme !== 'Bearer' || !token) {
         return res.status(401).json({ message: 'Invalid token', error: 'Invalid token' });
       }
-      const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
       const { id, username, hashedPassword, role, iat, exp } = decoded
       const currentTime = Math.floor(Date.now() / 1000);
       if (exp < currentTime) {

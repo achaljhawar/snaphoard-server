@@ -21,8 +21,11 @@ export const loginUser = async (req: Request, res: Response) => {
         const hashedPassword = user[0].password;
         const username = user[0].username;
         const role = user[0].role;
+        const firstName = user[0].firstName;
+        const lastName = user[0].lastName;
+        console.log({ id, username, firstName, lastName, hashedPassword, role });
         const token = jwt.sign(
-          { id, username, hashedPassword, role },
+          { id, username, firstName, lastName, hashedPassword, role },
           process.env.JWT_SECRET as string,
           {
             expiresIn: "30d",

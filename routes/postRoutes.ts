@@ -1,0 +1,13 @@
+import express from 'express';
+import { createPost } from '../api/createpost';
+import { getPostInfo } from '../api/getpostinfo';
+import { addLike } from '../api/addlike';
+import { removeLike } from '../api/removelike';
+import { getAllPostInfo } from '../api/getallpostinfo';
+const router = express.Router();
+router.post('/createpost', createPost);
+router.post('/getpostinfo', getPostInfo);
+router.post('/addlike', addLike);
+router.post('/removelike', removeLike);
+router.post('/getallpostinfo', getAllPostInfo);
+export default router;
