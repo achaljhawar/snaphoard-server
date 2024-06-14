@@ -45,6 +45,8 @@ export const getPostInfo = async (req: Request, res: Response) => {
         image_url: data.attachment_url,
         username: userData.username,
         initials: initials,
+        isliked: false,
+        issaved: false,
         likecount: likecount,
       };
       if (!data) {
@@ -101,6 +103,12 @@ export const getPostInfo = async (req: Request, res: Response) => {
         .from("post_likes")
         .select("*")
         .eq("post_id", slug);
+      const {data: savedData, error: savedError} = await supabase
+        .from("saved_posts")
+        .select("*")
+        .eq("post_id", slug)
+        .eq("user_id", id);
+      const issaved = savedData && savedData.length > 0;
       const likecount = likecountdata?.length || 0;
       const postdata = {
         caption: data.caption,
@@ -108,7 +116,8 @@ export const getPostInfo = async (req: Request, res: Response) => {
         username: userData.username,
         initials: initials,
         isliked: isliked,
-        likecount: likecount
+        likecount: likecount,
+        issaved: issaved,
       };
       if (!data) {
         return res.status(404).json({ error: "Post not found" });
