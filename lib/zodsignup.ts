@@ -23,6 +23,6 @@ export const AuthCredentialsValidator = z.object({
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/\d/, 'Password must contain at least one number')
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character'),
+    .regex(/[!@#$%^&*(),.?"://{}|<>]/, 'Password must contain at least one special character'),
   role: z.string().min(1, "Role is required"),
 });
