@@ -10,22 +10,16 @@ export const loginUser = async (req: Request, res: Response) => {
     let { data: user, error } = await supabase
       .from("users")
       .select("*")
-      .eq("username", username);
+      .eq("username", username)
+      .single();
     if (error) {
       console.error("Error logging in:", error);
       return res.status(400).json({ error: error.message });
     }
-    if (user && user.length > 0) {
-      if (user[0].password === sha256(password)) {
-        const id = user[0].id;
-        const hashedPassword = user[0].password;
-        const username = user[0].username;
-        const role = user[0].role;
-        const firstName = user[0].firstName;
-        const lastName = user[0].lastName;
-        console.log({ id, username, firstName, lastName, hashedPassword, role });
+    if (user) {
+      if (user.password === sha256(password)) {
         const token = jwt.sign(
-          { id, username, firstName, lastName, hashedPassword, role },
+          { id: user.id, username: user.username, firstName: user.firstName, lastName: user.lastName, hashedPassword: user.password, role:  user.role},
           process.env.JWT_SECRET as string,
           {
             expiresIn: "30d",
